@@ -1,0 +1,36 @@
+/* styles.css */
+
+/* Apply a background color to the header */
+header {
+    background-color: #0074D9; /* Blue color */
+    color: #FFFFFF; /* White text */
+    padding: 20px;
+    text-align: center;
+}
+
+/* Style the navigation menu (tabs) */
+nav {
+    background-color: #333; /* Dark background */
+}
+
+    nav ul {
+        list-style-type: none;
+        padding: 0;
+        margin: 0;
+    }
+
+    nav li {
+        display: inline;
+        margin-right: 20px;
+    }
+
+    nav a {
+        text-decoration: none;
+        color: #FFFFFF; /* White text */
+        font-weight: bold;
+    }
+
+        /* Add hover effect to the navigation links */
+        nav a:hover {
+            color: #FF851B; /* Orange on hover */
+        }
