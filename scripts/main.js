@@ -7,6 +7,7 @@ const particles = [
   { name: "Muon", mass: 1.884e-28, charge: -1, spin: 0.5, discoveryDate: 1936, lifetime: 2.2e-6 },
   { name: "Tau", mass: 3.167e-27, charge: -1, spin: 0.5, discoveryDate: 1975, lifetime: 2.9e-13 },
   { name: "Higgs Boson", mass: 1.26e-25, charge: 0, spin: 0, discoveryDate: 2012, lifetime: 1.56e-22 },
+  { name: "Neutrino", mass: 0, charge: 0, spin: 1/2, discoveryDate: 1956, lifetime: Infinity }
 ];
 
 // Shuffle the particle array and split into two decks
@@ -85,6 +86,22 @@ function compareCards() {
 
   updateCardCounts();
   checkGameOver();
+
+  // Change the button text to 'Next Cards'
+  document.getElementById("compare-button").textContent = "Next Cards";
+  isNextCards = true;
+}
+
+// Go to the next cards and reset the opponent's card
+function nextCards() {
+  // Move to the next cards and reset the opponent's display
+  displayPlayerCard();
+  displayOpponentCardBlank();
+  document.getElementById("result").textContent = "";
+  
+  // Change the button back to 'Compare'
+  document.getElementById("compare-button").textContent = "Compare";
+  isNextCards = false;
 }
 
 // Check if the game is over
@@ -115,4 +132,12 @@ displayPlayerCard();
 displayOpponentCardBlank();
 
 // Add event listener to the compare button
-document.getElementById("compare-button").addEventListener("click", compareCards);
+let isNextCards = false; // Tracks whether we are in 'Next Cards' state
+
+document.getElementById("compare-button").addEventListener("click", () => {
+  if (isNextCards) {
+    nextCards();
+  } else {
+    compareCards();
+  }
+});
