@@ -1,62 +1,68 @@
 body {
   font-family: Arial, sans-serif;
+  text-align: center;
   background-color: #f4f4f9;
   margin: 0;
-  padding: 20px;
-  display: flex;
+  padding: 0;
+}
+
+header {
+  background-color: #4CAF50;
+  color: white;
+  padding: 1rem 0;
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(5, 40px);
+  gap: 5px;
   justify-content: center;
-  align-items: center;
-  height: 100vh;
+  margin: 20px auto;
 }
 
-.game-container {
+.tile {
+  width: 40px;
+  height: 40px;
+  text-transform: uppercase;
   text-align: center;
-  max-width: 800px;
-}
-
-.card-container {
-  display: flex;
-  justify-content: space-between;
-  margin-bottom: 20px;
-}
-
-.card {
-  border: 2px solid #333;
-  border-radius: 10px;
-  padding: 10px;
+  line-height: 40px;
+  border: 2px solid #ccc;
+  font-size: 20px;
+  font-weight: bold;
   background-color: #fff;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-  width: 45%;
 }
 
-.card h2 {
-  margin-top: 0;
+.tile.correct {
+  background-color: #6aaa64; /* green */
+  color: white;
 }
 
-.controls {
-  margin: 20px 0;
+.tile.present {
+  background-color: #c9b458; /* yellow */
+  color: white;
+}
+
+.tile.absent {
+  background-color: #787c7e; /* gray */
+  color: white;
+}
+
+input {
+  margin-top: 20px;
+  padding: 10px;
+  font-size: 16px;
+  text-transform: uppercase;
 }
 
 button {
   padding: 10px 20px;
   font-size: 16px;
-  border: none;
-  border-radius: 5px;
-  background-color: #007bff;
+  background-color: #4CAF50;
   color: white;
+  border: none;
   cursor: pointer;
 }
 
 button:hover {
-  background-color: #0056b3;
-}
-
-.result {
-  margin: 10px 0;
-  font-weight: bold;
-}
-
-.card-counts {
-  display: flex;
-  justify-content: space-between;
+  background-color: #45a049;
 }

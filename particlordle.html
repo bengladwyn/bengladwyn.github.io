@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Particle Physics Wordle</title>
+    <link rel="stylesheet" href="styles/styles.css">
+</head>
+<body>
+    <header>
+        <h1>Particle Physics Wordle</h1>
+    </header>
+    <div id="game" class="grid"></div>
+    <input id="guess" type="text" maxlength="5" placeholder="Enter your guess">
+    <button onclick="makeGuess()">Submit</button>
+    <p id="message"></p>
+    <script>
+        const words = ["quark", "boson", "gluon", "tauon", "charm"]; // Particle physics words
+        const secretWord = words[Math.floor(Math.random() * words.length)].toUpperCase();
+        const maxAttempts = 6;
+        let attempts = 0;
+
+        const gameGrid = document.getElementById('game');
+        const message = document.getElementById('message');
+
+        // Initialize the grid
+        for (let i = 0; i < maxAttempts * 5; i++) {
+            const tile = document.createElement('div');
+            tile.className = 'tile';
+            gameGrid.appendChild(tile);
+        }
+
+        function makeGuess() {
+            const guessInput = document.getElementById('guess');
+            const guess = guessInput.value.toUpperCase();
+
+            if (guess.length !== 5) {
+                message.textContent = "Please enter a 5-letter word.";
+                return;
+            }
+
+            if (!words.includes(guess.toLowerCase())) {
+                message.textContent = "Not a valid particle physics word!";
+                return;
+            }
+
+            const tiles = gameGrid.querySelectorAll('.tile');
+            const start = attempts * 5;
+
+            for (let i = 0; i < 5; i++) {
+                tiles[start + i].textContent = guess[i];
+                if (guess[i] === secretWord[i]) {
+                    tiles[start + i].classList.add('correct');
+                } else if (secretWord.includes(guess[i])) {
+                    tiles[start + i].classList.add('present');
+                } else {
+                    tiles[start + i].classList.add('absent');
+                }
+            }
+
+            attempts++;
+            guessInput.value = '';
+
+            if (guess === secretWord) {
+                message.textContent = "Congratulations! You guessed the word!";
+                guessInput.disabled = true;
+                return;
+            }
+
+            if (attempts === maxAttempts) {
+                message.textContent = `Game over! The word was ${secretWord}.`;
+                guessInput.disabled = true;
+            }
+        }
+    </script>
+</body>
+</html>
