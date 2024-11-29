@@ -39,11 +39,6 @@
                 return;
             }
 
-            if (!words.includes(guess.toLowerCase())) {
-                message.textContent = "Not a valid particle physics word!";
-                return;
-            }
-
             const tiles = gameGrid.querySelectorAll('.tile');
             const start = attempts * 5;
 
