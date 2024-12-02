@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Particle Physics Wordle</title>
+    <link rel="stylesheet" href="styles/styles.css">
+</head>
+<body>
+    <header>
+        <h1>Particle Physics Wordle</h1>
+    </header>
+    <div id="game" class="grid"></div>
+    <input id="guess" type="text" maxlength="5" placeholder="Enter your guess">
+    <button onclick="makeGuess()">Submit</button>
+    <p id="message"></p>
+    <script>
+        let validWords = []; // List of valid words
+let secretWord = ""; // Placeholder for the word of the day
+const maxAttempts = 6;
+let attempts = 0;
+
+const gameGrid = document.getElementById('game');
+const message = document.getElementById('message');
+
+// Initialize the grid
+for (let i = 0; i < maxAttempts * 5; i++) {
+    const tile = document.createElement('div');
+    tile.className = 'tile';
+    gameGrid.appendChild(tile);
+}
+
+// Load the CSV for the word of the day and add its words to validWords
+fetch('words.csv')
+    .then(response => response.text())
+    .then(data => {
+        const today = new Date().toISOString().split('T')[0];
+        const rows = data.trim().split('\n');
+        const wordMap = rows.reduce((map, row) => {
+            const [date, word] = row.split(',');
+            const upperWord = word.trim().toUpperCase();
+            map[date] = upperWord;
+
+            // Add the word to validWords if not already present
+            if (!validWords.includes(upperWord)) {
+                validWords.push(upperWord);
+            }
+            return map;
+        }, {});
+
+        if (wordMap[today]) {
+            secretWord = wordMap[today];
+        } else {
+            message.textContent = "No word found for today.";
+        }
+    })
+    .catch(error => {
+        console.error("Error loading words:", error);
+        message.textContent = "Error loading the word of the day.";
+    });
+
+// Load the valid words list
+fetch('valid_words.txt')
+    .then(response => response.text())
+    .then(data => {
+        // Split the file into lines, trim whitespace, and convert to uppercase
+        const loadedWords = data.trim().split('\n').map(word => word.trim().toUpperCase());
+
+        // Add the valid words to the validWords array, avoiding duplicates
+        loadedWords.forEach(word => {
+            if (!validWords.includes(word)) {
+                validWords.push(word);
+            }
+        });
+
+        console.log("Loaded valid words:", validWords); // Debugging line
+    })
+    .catch(error => {
+        console.error("Error loading valid words:", error);
+        message.textContent = "Error loading the valid words list.";
+    });
+
+function makeGuess() {
+    if (!secretWord) {
+        message.textContent = "Word of the day is not loaded yet.";
+        return;
+    }
+
+    if (!validWords.length) {
+        message.textContent = "Valid words are not loaded yet.";
+        return;
+    }
+
+    const guessInput = document.getElementById('guess');
+    const guess = guessInput.value.toUpperCase();
+
+    if (guess.length !== 5) {
+        message.textContent = "Please enter a 5-letter word.";
+        return;
+    }
+
+    if (!validWords.includes(guess)) {
+        message.textContent = `"${guess}" is not a valid word. Try again.`;
+        return;
+    }
+
+    const tiles = gameGrid.querySelectorAll('.tile');
+    const start = attempts * 5;
+
+    for (let i = 0; i < 5; i++) {
+        tiles[start + i].textContent = guess[i];
+        if (guess[i] === secretWord[i]) {
+            tiles[start + i].classList.add('correct');
+        } else if (secretWord.includes(guess[i])) {
+            tiles[start + i].classList.add('present');
+        } else {
+            tiles[start + i].classList.add('absent');
+        }
+    }
+
+    attempts++;
+    guessInput.value = '';
+
+    if (guess === secretWord) {
+        message.textContent = "Congratulations! You guessed the word!";
+        guessInput.disabled = true;
+        return;
+    }
+
+    if (attempts === maxAttempts) {
+        message.textContent = `Game over! The word was ${secretWord}.`;
+        guessInput.disabled = true;
+    }
+}
+    </script>
+</body>
+</html>
