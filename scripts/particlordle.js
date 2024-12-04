@@ -28,6 +28,7 @@ const message = document.getElementById('message');
 const wordInfo = document.getElementById('wordInfo');
 const guessInput = document.getElementById('guess');
 const submitGuessButton = document.getElementById('submitGuess');
+const submitScoreButton = document.getElementById('submitScore');
 
 // Initialize the grid
 for (let i = 0; i < maxAttempts * 5; i++) {
@@ -78,8 +79,6 @@ async function submitLeaderboard(name, attempts) {
             attempts: attempts,
             date: new Date().toISOString().split('T')[0]  // Store the date
         });
-        console.log("Document written with ID: ", docRef.id);
-        alert("Your score has been submitted!");
         refreshLeaderboard();
     } catch (e) {
         console.error("Error adding document: ", e);
@@ -99,8 +98,6 @@ fetch('valid_words.txt')
             validWords.push(word);
         }
     });
-
-    console.log("Loaded valid words:", validWords); // Debugging line
 })
 .catch(error => {
     console.error("Error loading valid words:", error);
@@ -171,17 +168,15 @@ function makeGuess() {
     guessInput.value = '';
 
     if (guess === secretWord) {
-        message.textContent = "Congratulations! You guessed the word!";
+        message.textContent = "Congratulations! You guessed the word! Scroll down to learn more and submit your score to the leaderboard.";
         wordInfo.innerHTML = `
             <p><strong>Facts of the day:</strong> ${window.wordDetails.description}</p>
             <img src="${window.wordDetails.image}" alt="${guess}" width="300">
         `;
         guessInput.disabled = true;
 
-        const name = prompt("Enter your name to submit your score:");
-        if (name) {
-            submitLeaderboard(name, attempts);
-        }
+        // Show the form to submit the score
+        document.getElementById('submitForm').style.display = 'block';
         return;
     }
 
@@ -189,10 +184,28 @@ function makeGuess() {
         message.textContent = `Game over! The word was ${secretWord}.`;
         guessInput.disabled = true;
     }
+    
+}
+
+
+function submitScore() {
+    const name = document.getElementById('playerName').value;
+    if (!name) {
+        alert("Please enter your name!");
+        return;
+    }
+
+    submitLeaderboard(name, attempts);
+    
+    // Hide the submit form after submitting
+    document.getElementById('submitForm').style.display = 'none';
 }
 
 // Event listeners
 submitGuessButton.addEventListener('click', makeGuess);
+
+// Event listeners
+submitScoreButton.addEventListener('click', submitScore);
 
 // Load leaderboard on page load
 window.onload = function() {
