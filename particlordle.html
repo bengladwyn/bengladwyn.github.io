@@ -83,63 +83,84 @@
                 message.textContent = "Error loading the valid words list.";
             });
 
-        function makeGuess() {
-            if (!secretWord) {
-                message.textContent = "Word of the day is not loaded yet.";
-                return;
-            }
+            function makeGuess() {
+                if (!secretWord) {
+                    message.textContent = "Word of the day is not loaded yet.";
+                    return;
+                }
 
-            if (!validWords.length) {
-                message.textContent = "Valid words are not loaded yet.";
-                return;
-            }
+                if (!validWords.length) {
+                    message.textContent = "Valid words are not loaded yet.";
+                    return;
+                }
 
-            const guessInput = document.getElementById('guess');
-            const guess = guessInput.value.toUpperCase();
+                const guessInput = document.getElementById('guess');
+                const guess = guessInput.value.toUpperCase();
 
-            if (guess.length !== 5) {
-                message.textContent = "Please enter a 5-letter word.";
-                return;
-            }
+                if (guess.length !== 5) {
+                    message.textContent = "Please enter a 5-letter word.";
+                    return;
+                }
 
-            if (!validWords.includes(guess)) {
-                message.textContent = `"${guess}" is not a valid word. Try again.`;
-                return;
-            }
+                if (!validWords.includes(guess)) {
+                    message.textContent = `"${guess}" is not a valid word. Try again.`;
+                    return;
+                }
 
-            const tiles = gameGrid.querySelectorAll('.tile');
-            const start = attempts * 5;
+                const tiles = gameGrid.querySelectorAll('.tile');
+                const start = attempts * 5;
 
-            for (let i = 0; i < 5; i++) {
-                tiles[start + i].textContent = guess[i];
-                if (guess[i] === secretWord[i]) {
-                    tiles[start + i].classList.add('correct');
-                } else if (secretWord.includes(guess[i])) {
-                    tiles[start + i].classList.add('present');
-                } else {
-                    tiles[start + i].classList.add('absent');
+                // Track letter counts for the secret word
+                const secretLetterCounts = {};
+                for (const letter of secretWord) {
+                    secretLetterCounts[letter] = (secretLetterCounts[letter] || 0) + 1;
+                }
+
+                // First pass: Check for correct positions (green)
+                const result = Array(5).fill(null); // Placeholder for tile states
+                for (let i = 0; i < 5; i++) {
+                    tiles[start + i].textContent = guess[i];
+                    if (guess[i] === secretWord[i]) {
+                        tiles[start + i].classList.add('correct');
+                        result[i] = 'correct';
+                        secretLetterCounts[guess[i]]--; // Reduce count for matched letter
+                    }
+                }
+
+                // Second pass: Check for present letters (yellow)
+                for (let i = 0; i < 5; i++) {
+                    if (result[i] === null) { // Not already marked as correct
+                        if (secretLetterCounts[guess[i]] > 0) {
+                            tiles[start + i].classList.add('present');
+                            result[i] = 'present';
+                            secretLetterCounts[guess[i]]--; // Reduce count for matched letter
+                        } else {
+                            tiles[start + i].classList.add('absent');
+                            result[i] = 'absent';
+                        }
+                    }
+                }
+
+                attempts++;
+                guessInput.value = '';
+
+                if (guess === secretWord) {
+                    // Display word information (description and image)
+                    message.textContent = "Congratulations! You guessed the word!";
+                    wordInfo.innerHTML = `
+                        <p><strong>Facts of the day:</strong> ${window.wordDetails.description}</p>
+                        <img src="${window.wordDetails.image}" alt="${guess}" width="300">
+                    `;
+                    guessInput.disabled = true;
+                    return;
+                }
+
+                if (attempts === maxAttempts) {
+                    message.textContent = `Game over! The word was ${secretWord}.`;
+                    guessInput.disabled = true;
                 }
             }
 
-            attempts++;
-            guessInput.value = '';
-
-            if (guess === secretWord) {
-                // Display word information (description and image)
-                message.textContent = "Congratulations! You guessed the word!";
-                wordInfo.innerHTML = `
-                    <p><strong>Facts of the day:</strong> ${window.wordDetails.description}</p>
-                    <img src="${window.wordDetails.image}" alt="${guess}" width="300">
-                `;
-                guessInput.disabled = true;
-                return;
-            }
-
-            if (attempts === maxAttempts) {
-                message.textContent = `Game over! The word was ${secretWord}.`;
-                guessInput.disabled = true;
-            }
-        }
     </script>
 </body>
 </html>
