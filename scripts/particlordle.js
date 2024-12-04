@@ -138,6 +138,7 @@ function makeGuess() {
         return;
     }
 
+    const guessInput = document.getElementById('guess');
     const guess = guessInput.value.toUpperCase();
 
     if (guess.length !== 5) {
@@ -153,14 +154,34 @@ function makeGuess() {
     const tiles = gameGrid.querySelectorAll('.tile');
     const start = attempts * 5;
 
+    // Track letter counts for the secret word
+    const secretLetterCounts = {};
+    for (const letter of secretWord) {
+        secretLetterCounts[letter] = (secretLetterCounts[letter] || 0) + 1;
+    }
+
+    // First pass: Check for correct positions (green)
+    const result = Array(5).fill(null); // Placeholder for tile states
     for (let i = 0; i < 5; i++) {
         tiles[start + i].textContent = guess[i];
         if (guess[i] === secretWord[i]) {
             tiles[start + i].classList.add('correct');
-        } else if (secretWord.includes(guess[i])) {
-            tiles[start + i].classList.add('present');
-        } else {
-            tiles[start + i].classList.add('absent');
+            result[i] = 'correct';
+            secretLetterCounts[guess[i]]--; // Reduce count for matched letter
+        }
+    }
+
+    // Second pass: Check for present letters (yellow)
+    for (let i = 0; i < 5; i++) {
+        if (result[i] === null) { // Not already marked as correct
+            if (secretLetterCounts[guess[i]] > 0) {
+                tiles[start + i].classList.add('present');
+                result[i] = 'present';
+                secretLetterCounts[guess[i]]--; // Reduce count for matched letter
+            } else {
+                tiles[start + i].classList.add('absent');
+                result[i] = 'absent';
+            }
         }
     }
 

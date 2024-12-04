@@ -51,7 +51,14 @@ input {
   margin-top: 20px;
   padding: 10px;
   font-size: 16px;
-  text-transform: uppercase;
+}
+
+input#guess {
+  text-transform: uppercase; /* Only uppercase for the guess input */
+}
+
+input#playerName {
+  text-transform: none; /* Ensure name input stays as typed */
 }
 
 button {
