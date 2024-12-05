@@ -105,10 +105,18 @@ fetch('valid_words.txt')
 });
 
 
-// Refresh the leaderboard on the page
 async function fetchLeaderboard() {
     const leaderboardRef = collection(db, "leaderboard");
-    const q = query(leaderboardRef, orderBy("attempts"), limit(15));  // Limit to top 5
+    const today = new Date().toISOString().split('T')[0]; // Get today's date in YYYY-MM-DD format
+
+    // Query Firestore for entries with today's date
+    const q = query(
+        leaderboardRef,
+        orderBy("attempts"), // Order by attempts (lowest to highest)
+        limit(15),          // Limit to top 15
+        where("date", "==", today) // Only entries for today's date
+    );
+
     const querySnapshot = await getDocs(q);
     const leaderboard = [];
     querySnapshot.forEach((doc) => {
