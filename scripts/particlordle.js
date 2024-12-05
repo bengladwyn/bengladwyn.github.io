@@ -108,7 +108,7 @@ fetch('valid_words.txt')
 // Refresh the leaderboard on the page
 async function fetchLeaderboard() {
     const leaderboardRef = collection(db, "leaderboard");
-    const q = query(leaderboardRef, orderBy("attempts"), limit(5));  // Limit to top 5
+    const q = query(leaderboardRef, orderBy("attempts"), limit(15));  // Limit to top 5
     const querySnapshot = await getDocs(q);
     const leaderboard = [];
     querySnapshot.forEach((doc) => {
