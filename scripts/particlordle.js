@@ -1,6 +1,6 @@
 // Import Firebase dependencies
 import { initializeApp } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-app.js";
-import { getFirestore, collection, addDoc, getDocs, query, orderBy, limit } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-firestore.js";
+import { getFirestore, collection, addDoc, getDocs, query, orderBy, limit, where } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-firestore.js";
 
 // Firebase configuration
 const firebaseConfig = {
@@ -108,7 +108,7 @@ fetch('valid_words.txt')
 async function fetchLeaderboard() {
     const leaderboardRef = collection(db, "leaderboard");
     const today = new Date().toISOString().split('T')[0]; // Get today's date in YYYY-MM-DD format
-
+    
     // Query Firestore for entries with today's date
     const q = query(
         leaderboardRef,
@@ -128,7 +128,7 @@ async function fetchLeaderboard() {
 async function refreshLeaderboard() {
     const leaderboard = await fetchLeaderboard();
     const leaderboardContainer = document.getElementById('leaderboard');
-    leaderboardContainer.innerHTML = '<h2>Leaderboard</h2>';
+    leaderboardContainer.innerHTML = '<h2>Today\'s Leaderboard</h2>';
     leaderboard.forEach(entry => {
         leaderboardContainer.innerHTML += `<p>${entry.name}: ${entry.attempts} attempts</p>`;
     });
