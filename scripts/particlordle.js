@@ -29,6 +29,8 @@ const wordInfo = document.getElementById('wordInfo');
 const guessInput = document.getElementById('guess');
 const submitGuessButton = document.getElementById('submitGuess');
 const submitScoreButton = document.getElementById('submitScore');
+const copyShareButton = document.getElementById('copyShare');
+let allEmojiStrings = ""; // Declared outside to accumulate
 
 // Initialize the grid
 for (let i = 0; i < maxAttempts * 5; i++) {
@@ -167,13 +169,13 @@ function initializeKeyboard() {
     });
 
     const button2 = document.createElement('button2');
-    button2.textContent = "DEL";
+    button2.textContent = "Backspace";
     button2.id = `key-del`;
     button2.addEventListener('click', () => handleKeyboardInput("DEL"));
     keyboardContainer.appendChild(button2);
 
     const button3 = document.createElement('button2');
-    button3.textContent = "ENT";
+    button3.textContent = "Enter";
     button3.id = `key-ent`;
     button3.addEventListener('click', () => handleKeyboardInput("ENT"));
     keyboardContainer.appendChild(button3);
@@ -193,6 +195,38 @@ function handleKeyboardInput(input) {
         // Add letter to the input if it's a valid letter
         guessInput.value += input;
     }
+}
+
+const emojiMap = {
+    correct: "🟩", // Green square for correct guess
+    present: "🟧", // Orange square for present letter
+    absent: "⬜", // Black square for absent letter
+  };
+
+// Copy share text to clipboard
+function copyShareText() {
+    const guessString = guessInput.value.toUpperCase();
+    const tiles = gameGrid.querySelectorAll('.tile');
+    
+    // New loop to append emojis and newlines
+    let allEmojiStrings = ""; // Reset the string
+    for (let i = 0; i < attempts; i++) {
+        let currentEmojiString = "";
+        for (let j = 0; j < 5; j++) {
+            const tile = tiles[i * 5 + j]; // Correctly select the tile
+            if (tile.classList.contains('correct')) {
+                currentEmojiString += emojiMap.correct;
+            } else if (tile.classList.contains('present')) {
+                currentEmojiString += emojiMap.present;
+            } else {
+                currentEmojiString += emojiMap.absent;
+            }
+        }
+        allEmojiStrings += currentEmojiString + "\n"; // Add newline after each row
+    }
+
+    const shareText = `${allEmojiStrings}Play Particlordle with me! Can you guess the word of the day?  https://bengladwyn.github.io/particlordle.html`;
+    navigator.clipboard.writeText(shareText);
 }
 
 // Game logic
@@ -256,7 +290,8 @@ function makeGuess() {
     updateKeyboard(guess, result);
 
     if (guess === secretWord) {
-        message.textContent = "Congratulations! You guessed the word! Enter your name into the leaderboard below, and scroll down to learn more about the particle physics word of the day.";
+        message.textContent = "Congratulations! You guessed the word! Enter your name into the leaderboard below.";
+    
         wordInfo.innerHTML = `
             <p><strong>Facts of the day:</strong> ${window.wordDetails.description}</p>
             <img src="${window.wordDetails.image}" alt="${guess}" width="300">
@@ -266,6 +301,8 @@ function makeGuess() {
         // Show the form to submit the score
         document.getElementById('submitForm').style.display = 'block';
         document.getElementById('keyboard').style.display = 'none';
+        document.getElementById('guess').style.display = 'none';
+        document.getElementById('submitGuess').style.display = 'none';
         return;
     }
 
@@ -286,9 +323,12 @@ function submitScore() {
     }
 
     submitLeaderboard(name, attempts);
+    message.textContent = `Score submitted! Share your particlordle score with friends:`;
     
     // Hide the submit form after submitting
     document.getElementById('submitForm').style.display = 'none';
+
+    document.getElementById('shareBox').style.display = 'block';
 }
 
 // Event listeners
@@ -296,6 +336,9 @@ submitGuessButton.addEventListener('click', makeGuess);
 
 // Event listeners
 submitScoreButton.addEventListener('click', submitScore);
+
+// Event listeners
+copyShareButton.addEventListener('click', copyShareText);
 
 // Load leaderboard on page load
 window.onload = function() {
