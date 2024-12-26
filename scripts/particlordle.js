@@ -207,26 +207,10 @@ const emojiMap = {
 function copyShareText() {
     const guessString = guessInput.value.toUpperCase();
     const tiles = gameGrid.querySelectorAll('.tile');
-    
-    // New loop to append emojis and newlines
-    let allEmojiStrings = ""; // Reset the string
-    for (let i = 0; i < attempts; i++) {
-        let currentEmojiString = "";
-        for (let j = 0; j < 5; j++) {
-            const tile = tiles[i * 5 + j]; // Correctly select the tile
-            if (tile.classList.contains('correct')) {
-                currentEmojiString += emojiMap.correct;
-            } else if (tile.classList.contains('present')) {
-                currentEmojiString += emojiMap.present;
-            } else {
-                currentEmojiString += emojiMap.absent;
-            }
-        }
-        allEmojiStrings += currentEmojiString + "\n"; // Add newline after each row
-    }
 
     const shareText = `${allEmojiStrings}Play Particlordle with me! Can you guess the word of the day?  https://bengladwyn.github.io/particlordle.html`;
     navigator.clipboard.writeText(shareText);
+    message.textContent = "Copied to clipboard!";
 }
 
 // Game logic
@@ -327,7 +311,24 @@ function submitScore() {
     
     // Hide the submit form after submitting
     document.getElementById('submitForm').style.display = 'none';
-
+    // New loop to append emojis and newlines
+    const tiles = gameGrid.querySelectorAll('.tile');
+    for (let i = 0; i < attempts; i++) {
+        let currentEmojiString = "";
+        for (let j = 0; j < 5; j++) {
+            const tile = tiles[i * 5 + j]; // Correctly select the tile
+            if (tile.classList.contains('correct')) {
+                currentEmojiString += emojiMap.correct;
+            } else if (tile.classList.contains('present')) {
+                currentEmojiString += emojiMap.present;
+            } else {
+                currentEmojiString += emojiMap.absent;
+            }
+        }
+        allEmojiStrings += currentEmojiString + "\n"; // Add newline after each row
+    }
+    document.getElementById('shareText').textContent = allEmojiStrings;
+    document.getElementById('shareText').innerHTML = allEmojiStrings.replace(/\n/g, '<br>') + '<br>';;
     document.getElementById('shareBox').style.display = 'block';
 }
 
