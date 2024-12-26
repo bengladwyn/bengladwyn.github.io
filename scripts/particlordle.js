@@ -197,7 +197,7 @@ function makeGuess() {
     guessInput.value = '';
 
     if (guess === secretWord) {
-        message.textContent = "Congratulations! You guessed the word! Scroll down to learn more and submit your score to the leaderboard.";
+        message.textContent = "Congratulations! You guessed the word! Enter your name into the leaderboard below, and scroll down to learn more about the particle physics word of the day.";
         wordInfo.innerHTML = `
             <p><strong>Facts of the day:</strong> ${window.wordDetails.description}</p>
             <img src="${window.wordDetails.image}" alt="${guess}" width="300">

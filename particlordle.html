@@ -3,12 +3,12 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Particle Physics Wordle</title>
+    <title>Particlordle</title>
     <link rel="stylesheet" href="styles/styles.css">
 </head>
 <body>
     <header>
-        <h1>Particle Physics Wordle</h1>
+        <h1>Particlordle: A Particle Physics Web-based Word Game</h1>
     </header>
     
     <!-- Game Grid -->
@@ -19,16 +19,17 @@
     
     <!-- Submit button for the guess -->
     <button id="submitGuess">Submit</button>
-    
-    <!-- Message and word info display -->
+
     <p id="message"></p>
-    <div id="wordInfo"></div> <!-- Display word information here -->
-    
+
     <!-- Submit Score Form (hidden by default) -->
     <div id="submitForm" style="display:none;">
         <input id="playerName" type="text" placeholder="Enter your name">
         <button id="submitScore">Submit Score</button>
     </div>
+    
+    <!-- Message and word info display -->
+    <div id="wordInfo"></div> <!-- Display word information here -->
     
     <!-- Leaderboard display -->
     <div id="leaderboard"></div> 
