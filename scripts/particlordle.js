@@ -134,6 +134,67 @@ async function refreshLeaderboard() {
     });
 }
 
+const letterStates = {};
+
+
+function updateKeyboard(guess, result) {
+    guess.split('').forEach((letter, index) => {
+        const button = document.getElementById(`key-${letter}`);
+        if (result[index] === 'correct') {
+            letterStates[letter] = 'correct';
+        } else if (result[index] === 'present' && letterStates[letter] !== 'correct') {
+            letterStates[letter] = 'present';
+        } else if (result[index] === 'absent' && !letterStates[letter]) {
+            letterStates[letter] = 'absent';
+        }
+
+        // Update button class based on the state
+        button.className = letterStates[letter];
+    });
+}
+
+
+function initializeKeyboard() {
+    const keyboardContainer = document.getElementById('keyboard');
+    const letters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+    // Create letter buttons
+    letters.split('').forEach(letter => {
+        const button = document.createElement('button');
+        button.textContent = letter;
+        button.id = `key-${letter}`;
+        button.addEventListener('click', () => handleKeyboardInput(letter));
+        keyboardContainer.appendChild(button);
+    });
+
+    const button2 = document.createElement('button2');
+    button2.textContent = "DEL";
+    button2.id = `key-del`;
+    button2.addEventListener('click', () => handleKeyboardInput("DEL"));
+    keyboardContainer.appendChild(button2);
+
+    const button3 = document.createElement('button2');
+    button3.textContent = "ENT";
+    button3.id = `key-ent`;
+    button3.addEventListener('click', () => handleKeyboardInput("ENT"));
+    keyboardContainer.appendChild(button3);
+}
+
+
+function handleKeyboardInput(input) {
+    const guessInput = document.getElementById('guess');
+
+    if (input === "DEL") {
+        // Remove the last character from the input
+        guessInput.value = guessInput.value.slice(0, -1);
+    } else if (input === "ENT") {
+        // Submit the current guess
+        makeGuess();
+    } else if (input.length === 1 && guessInput.value.length < 5) {
+        // Add letter to the input if it's a valid letter
+        guessInput.value += input;
+    }
+}
+
 // Game logic
 function makeGuess() {
     if (!secretWord) {
@@ -146,7 +207,6 @@ function makeGuess() {
         return;
     }
 
-    const guessInput = document.getElementById('guess');
     const guess = guessInput.value.toUpperCase();
 
     if (guess.length !== 5) {
@@ -162,30 +222,27 @@ function makeGuess() {
     const tiles = gameGrid.querySelectorAll('.tile');
     const start = attempts * 5;
 
-    // Track letter counts for the secret word
     const secretLetterCounts = {};
     for (const letter of secretWord) {
         secretLetterCounts[letter] = (secretLetterCounts[letter] || 0) + 1;
     }
 
-    // First pass: Check for correct positions (green)
     const result = Array(5).fill(null); // Placeholder for tile states
     for (let i = 0; i < 5; i++) {
         tiles[start + i].textContent = guess[i];
         if (guess[i] === secretWord[i]) {
             tiles[start + i].classList.add('correct');
             result[i] = 'correct';
-            secretLetterCounts[guess[i]]--; // Reduce count for matched letter
+            secretLetterCounts[guess[i]]--;
         }
     }
 
-    // Second pass: Check for present letters (yellow)
     for (let i = 0; i < 5; i++) {
-        if (result[i] === null) { // Not already marked as correct
+        if (result[i] === null) {
             if (secretLetterCounts[guess[i]] > 0) {
                 tiles[start + i].classList.add('present');
                 result[i] = 'present';
-                secretLetterCounts[guess[i]]--; // Reduce count for matched letter
+                secretLetterCounts[guess[i]]--;
             } else {
                 tiles[start + i].classList.add('absent');
                 result[i] = 'absent';
@@ -195,6 +252,8 @@ function makeGuess() {
 
     attempts++;
     guessInput.value = '';
+
+    updateKeyboard(guess, result);
 
     if (guess === secretWord) {
         message.textContent = "Congratulations! You guessed the word! Enter your name into the leaderboard below, and scroll down to learn more about the particle physics word of the day.";
@@ -206,6 +265,7 @@ function makeGuess() {
 
         // Show the form to submit the score
         document.getElementById('submitForm').style.display = 'block';
+        document.getElementById('keyboard').style.display = 'none';
         return;
     }
 
@@ -215,6 +275,7 @@ function makeGuess() {
     }
     
 }
+
 
 
 function submitScore() {
@@ -238,5 +299,7 @@ submitScoreButton.addEventListener('click', submitScore);
 
 // Load leaderboard on page load
 window.onload = function() {
+    initializeKeyboard();
     refreshLeaderboard();
 };
+

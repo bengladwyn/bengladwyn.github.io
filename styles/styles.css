@@ -73,3 +73,49 @@ button {
 button:hover {
   background-color: #45a049;
 }
+
+.keyboard {
+  display: grid;
+  grid-template-columns: repeat(10, 1fr);
+  gap: 5px;
+  max-width: 400px;
+  margin: 10px auto;
+}
+
+.keyboard button {
+  padding: 10px;
+  font-size: 16px;
+  text-transform: uppercase;
+  cursor: pointer;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  background-color: #D3D3D3;
+}
+
+
+.keyboard button2 {
+  padding: 10px;
+  font-size: 16px;
+  text-transform: uppercase;
+  cursor: pointer;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  background-color: #D3D3D3;
+  grid-column: span 2;
+}
+
+
+.keyboard button.absent {
+  background-color: #787c7e; /* Grey for absent letters */
+  color: white;
+}
+
+.keyboard button.present {
+  background-color: #c9b458; /* Yellow for present letters */
+  color: white;
+}
+
+.keyboard button.correct {
+  background-color: #4CAF50; /* Green for correct letters */
+  color: white;
+}
