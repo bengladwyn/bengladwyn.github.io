@@ -33,17 +33,17 @@ header {
 }
 
 .tile.correct {
-  background-color: #6aaa64; /* green */
+  background-color: #4CAF50;
   color: white;
 }
 
 .tile.present {
-  background-color: #c9b458; /* yellow */
+  background-color: #FF7518; /* yellow */
   color: white;
 }
 
 .tile.absent {
-  background-color: #787c7e; /* gray */
+  background-color: #999999;
   color: white;
 }
 
@@ -106,12 +106,12 @@ button:hover {
 
 
 .keyboard button.absent {
-  background-color: #787c7e; /* Grey for absent letters */
+  background-color: #999999;
   color: white;
 }
 
 .keyboard button.present {
-  background-color: #c9b458; /* Yellow for present letters */
+  background-color: #FF7518; /* orange */
   color: white;
 }
 
