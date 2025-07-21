@@ -41,6 +41,7 @@ markdown_extensions:
 
 nav:
     - Home: index.md
+    - 'A Poem': lament.md
 #    - 'MkDocs official documentation': https://www.mkdocs.org/
 
 # # Notice that in this case, and since your documentation is not using
