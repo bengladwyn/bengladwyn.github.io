@@ -1,0 +1,50 @@
+site_name: Ben's Site
+site_description: My Personal Website
+site_author: Benjamin Gladwyn
+site_url: https://bengladwyn.github.io/
+
+repo_name: GitHub
+repo_url: https://github.com/bengladwyn/bengladwyn.github.io
+edit_uri: 'blob/master/docs'
+
+theme:
+  name: material
+  font: false
+  palette:
+    # Palette toggle for light mode
+    - media: '(prefers-color-scheme: light)'
+      scheme: default
+      primary: green
+      toggle:
+        icon: material/brightness-7
+        name: Switch to dark mode
+    # Palette toggle for dark mode
+    - media: '(prefers-color-scheme: dark)'
+      scheme: slate
+      primary: green
+      accent: amber
+      toggle:
+        icon: material/brightness-4
+        name: Switch to light mode
+
+extra_css:
+  - stylesheets/fonts.css
+
+markdown_extensions:
+  - attr_list
+
+
+# # [Legacy] If you want to use only one language for your documentation
+# # and you don't want to configure it through the i18n plugin
+# # you can still use the legacy configuration settings to do it
+# # using the nav property as follows:
+
+nav:
+    - Home: index.md
+#    - 'MkDocs official documentation': https://www.mkdocs.org/
+
+# # Notice that in this case, and since your documentation is not using
+# # i18n plugin, you don't have to follow the convection filename.<language>.md
+# # for your files. This is only required for using the i18n plugin. In addition,
+# # for those users who want to use this configuration setting,
+# # at least a file index.md is mandatory, so it has to be added or be renamed the current index.en.md.
