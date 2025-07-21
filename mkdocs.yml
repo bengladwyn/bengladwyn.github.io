@@ -4,7 +4,7 @@ site_author: Benjamin Gladwyn
 site_url: https://bengladwyn.github.io/
 
 repo_name: GitHub
-repo_url: https://github.com/bengladwyn/bengladwyn.github.io
+repo_url: https://github.com/bengladwyn.github.io
 edit_uri: 'blob/master/docs'
 
 theme:
