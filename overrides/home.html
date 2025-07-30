@@ -1,0 +1,225 @@
+{% extends "main.html" %}
+{% block tabs %}
+  <style>
+
+    
+    /* The new fixed tab bar */
+    .mytabs {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      color: white;
+      z-index: 1100;
+      transition: top 0.3s ease;
+    }
+
+    /* Hidden state — slide up */
+    .mytabs.hidden {
+      top: -60px;
+    }
+
+    /* Add some padding so main content won't be hidden behind tabs */
+    .md-main__inner {
+      padding-top: 60px; /* same height as .mytabs + some padding */
+    }
+
+    @media screen and (max-width: 800px) {
+      .mytabs {
+        display: none;
+      }
+    }
+
+  </style>
+
+{% import "partials/tabs-item.html" as item with context %}
+<nav class="mytabs" aria-label="{{ lang.t('tabs') }}">
+  <div class="md-grid">
+    <ul class="md-tabs__list">
+      {% for nav_item in nav %}
+        {{ item.render(nav_item) }}
+      {% endfor %}
+    </ul>
+  </div>
+</nav>
+  <style>
+    .md-main__inner {
+      margin: 0;
+    }
+    @media screen and (min-width: 60em) {
+      .md-sidebar--secondary {
+        display: none;
+      }
+    }
+    @media screen and (min-width: 76.25em) {
+      .md-sidebar--primary {
+        display: none;
+      }
+    }
+
+   .md-sidebar--primary, .md-sidebar--secondary {
+      position: fixed; /* or absolute, if needed */
+      z-index: 1200;   /* Higher than .mytabs (1100) */
+    }
+        
+    /* Full width image */
+    .mdx-hero__image img {
+      width: 100vw;
+      height: auto;
+      display: block;
+      object-fit: cover;
+    }
+
+    /* Make container relative so content can be absolute */
+    .mdx-hero-container {
+      position: relative;
+      width: 100vw;
+    }
+
+    /* Position content on top of image */
+    .mdx-hero__content {
+      position: absolute;
+      top: 10%;
+      left: 10%;
+      z-index: 1;
+      width: 90%;
+      max-width: 900px; /* keep your original width constraints */
+      box-sizing: border-box;
+      color: white; /* keep original text colors */
+    }
+    .mdx-hero__content h1 {
+      color: white;         /* keep it white */
+      font-size: 3rem;      /* much bigger font size, adjust as you like */
+      font-weight: bold;    /* or use this, same effect */
+      margin-bottom: 0.8rem; /* or even 0 to remove it */
+    }
+    /* Initially hide header by moving it up */
+    .md-header {
+      position: fixed;
+      top: -60px; /* Start visible */
+      left: 0;
+      right: 0;
+      z-index: 1000;
+      background: transparent !important; /* Remove default background */
+      box-shadow: none !important;        /* Remove drop shadow */
+      transition: top 0.3s ease, background 0.3s;
+    }
+
+    /* Hero content default visible */
+    .mdx-hero__content {
+      transition: opacity 0.4s ease;
+      opacity: 1;
+    }
+
+    /* Hero content hidden on scroll */
+    .mdx-hero__content.hidden {
+      opacity: 0;
+      pointer-events: none; /* prevent interaction */
+    }
+
+    /* Show header when scrolled */
+    .md-header.scrolled {
+      top: 0;
+    }
+
+    @media screen and (max-width: 1024px) {
+    .mdx-hero__content h1 {
+      font-size: 2.5rem;  /* smaller heading */
+    }
+    .mdx-hero__content p {
+      margin-top: 0.5rem
+    }
+    }
+    @media screen and (max-width: 800px) {
+    .mdx-hero__content h1 {
+      font-size: 1.5rem;  /* smaller heading */
+    }
+    .mdx-hero__content p {
+      font-size: 0.4rem;  /* smaller heading */
+    }
+    }
+
+/* Small screens */
+    @media screen and (max-width: 800px) {
+      .mdx-hero__content h1 {
+        display: none
+      }
+      .mdx-hero__content p {
+        margin-top: 1.5rem; /* adjust this value as needed */
+        font-size: 0.7rem;
+        margin-left: -1rem !important;
+      }
+      .mdx-hero__content .md-button {
+        display: none
+      }
+      .md-header {
+          top: 0; /* Start visible */
+          left: 0;
+          right: 0;
+          z-index: 1000;
+          background: transparent !important; /* Remove default background */
+          box-shadow: none !important;        /* Remove drop shadow */
+          transition: top 0.3s ease, background 0.3s;
+        }
+    }
+
+
+    /* Add some spacing below the hero section */
+    .about-me-section {
+      font-size: 1.1rem;
+      line-height: 1.6;
+      color: inherit; /* dark text for readability */
+    }
+    html {
+      scroll-behavior: smooth;
+    }
+  </style>
+
+
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+  const header = document.querySelector('.md-header');
+  const mytabs = document.querySelector('.mytabs');
+  const heroContent = document.querySelector('.mdx-hero__content');
+
+  window.addEventListener('scroll', () => {
+    if (window.scrollY > 40) {
+      header.classList.add('scrolled');
+      mytabs.classList.add('hidden');
+      heroContent.classList.add('hidden');
+    } else {
+      header.classList.remove('scrolled');
+      mytabs.classList.remove('hidden');
+      heroContent.classList.remove('hidden');
+    }
+  });
+});
+</script>
+
+  <section class="mdx-container mdx-hero-container">
+    <div class="mdx-hero__image">
+      <img src="{{ 'Snow.jpg' | url }}" alt="Snowy background" draggable="false">
+    </div>
+          
+    <div class="md-grid md-typeset">
+      <div class="mdx-hero">
+        <div class="mdx-hero__content">
+          <h1>Benjamin Gladwyn</h1>
+          <p>Welcome to my personal website.</p>
+         <a href="#about-me" class="md-button md-button--primary">
+            About me
+          </a>
+        </div>
+      </div>
+    </div>
+  </section>
+{% endblock %}
+
+{% block content %}
+  <section id="about-me" class="about-me-section">
+    <h2>About me</h2>
+    <p>I'm a first year DPhil at Oxford studying particle physics. I am working on the ATLAS experiment, specifically SUSY searches using the run 3 dataset. My supervisor is Alan Barr, and I am working closely with Ben Hodkinson and Alessandro Ruggiero. For my ATLAS Qualification Project I am developing the workflow for JetETMiss recommendations using Reana, with an emphasis on MET Track Soft Term calibration and uncertainties.</p>
+    <p>If you have any questions, or wish to collaborate, get in touch!</p>
+  </section>
+{% endblock %}
+{% block footer %}{% endblock %}
