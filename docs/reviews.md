@@ -9,6 +9,7 @@
 - [ ] *The Egyptian* (*Sinuhe the Egyptian*) by Mika Waltari 
 - [ ] *The Story of Sinuhe* 
 - [ ] *David Copperfield* by Charles Dickens
+- [ ] *A Walk in the Woods* by Bill Bryson
 
 #### Books I Have Read
 - [x] *1984* by George Orwell
