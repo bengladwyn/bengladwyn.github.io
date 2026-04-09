@@ -25,3 +25,7 @@
 - [x] Dec 25 - *Diddly Squat: The Farmer's Dog* by Jeremy Clarkson
 - [x] Jan 26 - *Under the Western Acacia* by Christian Jacq
 - [x] Mar 26 - *Burmese Days* by George Orwell
+- [x] Mar 26 - *The Witcher: The Last Wish* by Andrzej Sapkowski
+- [x] Apr 26 - *The Red Tent* by Anita Diamant
+- [x] Apr 26 - *Into the Air* by Jon Krakauer
+
